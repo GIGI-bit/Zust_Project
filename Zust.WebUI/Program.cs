@@ -1,7 +1,28 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Zust.Business.Abstrats;
+using Zust.Business.Concretes;
+using Zust.DataAccess.Abstracts;
+using Zust.DataAccess.Concretes;
+
+//using Zust.WebUI.Data;
+//using Zust.WebUI.Entities;
+using Zust.Entities.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IUserDal, UserDal>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+var con = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContext<SocialNetworkDbContext>(opt =>
+{
+    opt.UseSqlServer(con);
+});
+builder.Services.AddIdentity<CustomIdentityUser, CustomIdentityRole>().AddEntityFrameworkStores<SocialNetworkDbContext>().AddDefaultTokenProviders();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -17,7 +38,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
