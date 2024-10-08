@@ -13,8 +13,8 @@ namespace Zust.WebUI.Models
         [DataType(DataType.Password)]
         public string? Password { get; set; }
         [Required]
-        
-        public string? City{ get; set; }
+        public string? City { get; set; }
+        public IFormFile? File { get; set; }
         //public IFormFile? File {  get; set; }
         //public string? ImgUrl { get; set; } = "user.png";
     }

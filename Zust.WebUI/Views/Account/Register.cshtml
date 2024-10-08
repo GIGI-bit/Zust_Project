@@ -46,17 +46,22 @@
                                 <input asp-for=Password class="form-control">
                                 <span asp-validation-for="Password"></span>
                             </div>
-                        <div class="form-group">
-                            <label asp-for="City">City</label>
-                            <input asp-for=City class="form-control">
-                            <span asp-validation-for="City"></span>
-                        </div>
+                       
 
                             <div class="form-group">
                                 <label>Confirm Password</label>
                                 <input type="password" class="form-control">
                             </div>
 
+                        <div class="form-group">
+                            <label asp-for="City">City</label>
+                            <input asp-for=City class="form-control">
+                            <span asp-validation-for="City"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Image</label>
+                            <input type="file" asp-for="@Model.File">
+                        </div>
                             <div class="remember-me-wrap">
                                 <p>
                                     <input type="checkbox" id="privacyCheckBox">

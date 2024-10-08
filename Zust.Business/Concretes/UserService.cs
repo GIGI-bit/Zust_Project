@@ -42,9 +42,9 @@ namespace Zust.Business.Concretes
             return await _userDal.GetAsync(filter); 
         }
 
-        public Task<List<CustomIdentityUser>> GetListAsync(Expression<Func<CustomIdentityUser, bool>> filter = null)
+        public async Task<List<CustomIdentityUser>> GetListAsync()
         {
-            throw new NotImplementedException();
+            return await _userDal.GetListAsync();
         }
 
         public Task DeleteListAsync(List<CustomIdentityUser> entities)

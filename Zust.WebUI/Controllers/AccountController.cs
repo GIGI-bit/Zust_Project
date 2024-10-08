@@ -12,13 +12,16 @@ namespace Zust.WebUI.Controllers
         private readonly RoleManager<CustomIdentityRole> _roleManager;
         private readonly SignInManager<CustomIdentityUser> _signInManager;
         private readonly IUserService userService;
+        private readonly IImageService _imageService;
 
-        public AccountController(UserManager<CustomIdentityUser> userManager, RoleManager<CustomIdentityRole> roleManager, SignInManager<CustomIdentityUser> signInManager, IUserService userService)
+
+        public AccountController(UserManager<CustomIdentityUser> userManager, RoleManager<CustomIdentityRole> roleManager, SignInManager<CustomIdentityUser> signInManager, IUserService userService,IImageService imageService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             this.userService = userService;
+            _imageService = imageService;
         }
 
         public IActionResult Register()
@@ -55,13 +58,18 @@ namespace Zust.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                if (model.File != null)
+                {
+                    model.File = await _imageService.SaveFile(model.File);
+                }
 
                 CustomIdentityUser user = new CustomIdentityUser
                 {
                     UserName = model.Username,
                     Email = model.Email,
-                    City=model.City,
+                    City = model.City,
+                    isOnline=true,
+                    ConnectTime=DateTime.Now.ToString(),
                 };
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

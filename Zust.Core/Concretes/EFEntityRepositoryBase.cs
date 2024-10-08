@@ -41,9 +41,9 @@ namespace Zust.Core.Concretes
 
         }
 
-        public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> filter = null)
+        public async Task<List<TEntity>> GetListAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
         public async Task UpdateAsync(TEntity entity)

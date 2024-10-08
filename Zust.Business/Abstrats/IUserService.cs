@@ -11,7 +11,7 @@ namespace Zust.Business.Abstrats
     public interface IUserService
     {
         Task<CustomIdentityUser> GetAsync(Expression<Func<CustomIdentityUser, bool>> filter);
-        Task<List<CustomIdentityUser>> GetListAsync(Expression<Func<CustomIdentityUser, bool>> filter = null);
+        Task<List<CustomIdentityUser>> GetListAsync();
         Task DeleteListAsync(List<CustomIdentityUser> entities);
         Task DeleteAsync(CustomIdentityUser entity);
         Task AddAsync(CustomIdentityUser entity);
