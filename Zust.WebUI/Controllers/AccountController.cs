@@ -60,7 +60,7 @@ namespace Zust.WebUI.Controllers
             {
                 if (model.File != null)
                 {
-                    model.File = await _imageService.SaveFile(model.File);
+                    model.ImageUrl = await _imageService.SaveFile(model.File,"user");
                 }
 
                 CustomIdentityUser user = new CustomIdentityUser
@@ -70,6 +70,7 @@ namespace Zust.WebUI.Controllers
                     City = model.City,
                     isOnline=true,
                     ConnectTime=DateTime.Now.ToString(),
+                    ProfileImageUrl=model.ImageUrl,
                 };
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

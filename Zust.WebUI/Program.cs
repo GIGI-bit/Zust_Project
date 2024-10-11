@@ -16,6 +16,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserDal, UserDal>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IImageService, ImagesService>();
+builder.Services.AddScoped<IPostDal, PostDal>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICommentDal,CommentDal>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 
 builder.Services.AddCors(options =>

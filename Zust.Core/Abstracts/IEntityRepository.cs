@@ -8,7 +8,7 @@ namespace Zust.Core.Abstracts
         Task<T> GetAsync(Expression<Func<T, bool>> filter);
         Task<List<T>> GetListAsync();
         Task DeleteListAsync(List<T> entities);
-  
+
         Task DeleteAsync(T entity);
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);

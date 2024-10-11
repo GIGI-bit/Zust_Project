@@ -216,7 +216,7 @@
                         <div class="option-inner">
                             <div class="others-options d-flex align-items-center">
                                 <div class="option-item">
-                                    <a href="index.html" class="home-btn"><i class="flaticon-home"></i></a>
+                                    <a asp-controller="Home" asp-action="Index" class="home-btn"><i class="flaticon-home"></i></a>
                                 </div>
                                 <div class="option-item">
                                     <div class="dropdown friend-requests-nav-item">
@@ -451,7 +451,7 @@
                                     <div class="dropdown profile-nav-item">
                                         <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="menu-profile">
-                                                <img src="~/assets/images/user/user-1.jpg" class="rounded-circle" alt="image">
+                                                <img src="@(!string.IsNullOrEmpty(ViewBag.User.ProfileImageUrl) ? Url.Content(ViewBag.User.ProfileImageUrl) : Url.Content("~/images/user/user.png"))" class="rounded-circle" alt="image">
                                                 <span class="name">@ViewBag.User.UserName</span> 
                                                  <span id="user-@ViewBag.User.Id"></span> 
                                             </div>

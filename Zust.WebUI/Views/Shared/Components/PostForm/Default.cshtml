@@ -1,0 +1,43 @@
+﻿@model PostViewModel
+
+ <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/animate.min.css">
+    <link rel="stylesheet" href="~/assets/css/remixicon.css">
+    <link rel="stylesheet" href="~/assets/css/flaticon.css">
+    <link rel="stylesheet" href="~/assets/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="~/assets/css/simplebar.min.css">
+    <link rel="stylesheet" href="~/assets/css/metismenu.min.css">
+    <link rel="stylesheet" href="~/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/assets/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/responsive.css">
+
+
+<div class="news-feed news-feed-form" id="postCreateFormDiv">
+    <h3 class="news-feed-title">Create New Post</h3>
+
+    <form id="postForm">
+        <div class="form-group">
+            <textarea name="message" class="form-control" placeholder="Write something here..."></textarea>
+        </div>
+        <ul class="button-group d-flex justify-content-between align-items-center">
+            <label for="imgFile" class="photo-btn">
+                <i class="flaticon-gallery"></i> Photo
+                <input type="file" id="imgFile" name="ImgFile" asp-for="ImgFile" style="display: none;">
+            </label>
+          
+            <li class="video-btn">
+                <button type="submit"><i class="flaticon-video"></i> Video</button>
+            </li>
+            <li class="tag-btn">
+                <button type="submit"><i class="flaticon-tag"></i> Tag Friends</button>
+            </li>
+            <li class="post-btn">
+                <button type="button" onclick="submitPost()">Post</button>
+            </li>
+        </ul>
+    </form>
+</div>
+
+<script src="~/js/site.js"></script>
