@@ -24,8 +24,10 @@ namespace Zust.WebUI.Controllers
         private readonly ICommentService _commentService;
         private readonly IFriendRequestService _friendReqSer;
         private readonly IFriendService _friendService;
+        private readonly IChatService _chatService;
+        private readonly IMessageService _messageService;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<CustomIdentityUser> userManager, IUserService userService, IImageService imageService, IPostService postService, ICommentService commentService, IFriendRequestService friendRequestService, IFriendService friendService)
+        public HomeController(ILogger<HomeController> logger, UserManager<CustomIdentityUser> userManager, IUserService userService, IImageService imageService, IPostService postService, ICommentService commentService, IFriendRequestService friendRequestService, IFriendService friendService,IChatService chatService,IMessageService messageService)
         {
             _logger = logger;
             _userManager = userManager;
@@ -35,6 +37,8 @@ namespace Zust.WebUI.Controllers
             _commentService = commentService;
             _friendReqSer = friendRequestService;
             _friendService = friendService;
+            _chatService = chatService;
+            _messageService = messageService;
         }
 
         public async Task<IActionResult> Index()
@@ -127,7 +131,11 @@ namespace Zust.WebUI.Controllers
             return View();
         }
 
-        public IActionResult Messages() { return View(); }
+        public async Task<IActionResult> Messages()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.User = user;
+            return View(); }
         public async Task<IActionResult> Friends()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -251,6 +259,72 @@ namespace Zust.WebUI.Controllers
             }
             return BadRequest();
         }
+
+        public async Task<IActionResult> GoChat(string id)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var chat = await _chatService.GetChat(user.Id);
+
+            if (chat == null)
+            {
+                chat = new Chat
+                {
+                    ReceiverId = id,
+                    SenderId = user.Id,
+                    Messages = new List<Message>()
+                };
+
+                await _chatService.AddAsync(chat);
+            }
+
+            var messages = chat.Messages;
+            if (messages.Any())
+            {
+                foreach (var item in messages)
+                {
+                    item.HasSeen = true;
+                    await _messageService.UpdateAsync(item);
+                }
+            }
+
+
+            var chats = _chatService.GetChatsWithReciever(user.Id);
+            var users = await userService.GetListAsync();
+            var chatBlocks = from c in chats
+                             let receiver = (user.Id != c.ReceiverId) ? c.Receiver :users.FirstOrDefault(u => u.Id == c.SenderId)
+                             select new ChatBlockViewModel
+                             {
+                                 Messages = c.Messages,
+                                 Id = c.Id,
+                                 SenderId = c.SenderId,
+                                 Receiver = receiver,
+                                 ReceiverId = receiver.Id,
+                                 UnReadMessageCount = c.Messages.Count(m => m.HasSeen == false)
+                             };
+
+            var result = chatBlocks.ToList().Where(c => c.ReceiverId != user.Id);
+
+            var currentChatBlock = new ChatBlockViewModel
+            {
+                Id = chat.Id,
+                Messages = messages,
+                Receiver = chat.Receiver,
+                ReceiverId = chat.ReceiverId,
+                SenderId = chat.SenderId,
+                UnReadMessageCount = chat.Messages.Count(m => m.HasSeen == false)
+            };
+
+            var model = new ChatViewModel
+            {
+                CurrentUserId = user.Id,
+                CurrentReceiver = id,
+                CurrentChat = currentChatBlock,
+                Chats = result.Count() == 0 ? chatBlocks : result,
+            };
+
+            return View(model);
+        }
+
 
         public async Task<IActionResult> AcceptRequest(string userId, string senderId, int requestId)
         {

@@ -24,6 +24,10 @@ builder.Services.AddScoped<IFriendRequestDal, FriendRequestDal>();
 builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
 builder.Services.AddScoped<IFriendDal, FriendDal>();
 builder.Services.AddScoped<IFriendService, FriendService>();
+builder.Services.AddScoped<IMessageDal, MessageDal>();
+builder.Services.AddScoped<IMessageService,MessageSevice>();
+builder.Services.AddScoped<IChatDal, ChatDal>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 
 builder.Services.AddCors(options =>

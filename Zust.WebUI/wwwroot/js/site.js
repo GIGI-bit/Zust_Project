@@ -14,18 +14,30 @@ function GetAllUsers() {
                 var usersListDiv = document.getElementById("users-list");
                 var status = (data[i].isOnline) ? "online" : "offline";
                 if (data[i].hasRequestPending) {
-                    subContent = `<button class='btn btn-outline-secondary' onclick="TakeRequest('${data[i].id}')">Already Sent</button>`;
+                    subContent = `
+                     <div class='add-friend-btn'>
+                    <button class='btn btn-outline-secondary' onclick="TakeRequest('${data[i].id}')">Already Sent</button>
+                                </div>`;
                 }
                 else {
                     if (data[i].isFriend) {
-                        subContent = `<button class='btn btn-outline-secondary' onclick="UnfollowRequest('${data[i].id}')">UnFollow</button>`;
-                        //<a class='btn btn-outline-secondary m-2' href='/Home/GoChat/${data[i].id}' >Go Chat</a>
-
+                        subContent = `
+                         <div class='add-friend-btn'>
+                        <button class='btn btn-outline-secondary' onclick="UnfollowRequest('${data[i].id}')">UnFollow</button>
+                                </div>
+                                <div class='send-message-btn'>
+                        <a class='btn btn-outline-secondary m-2' href='/Home/GoChat/${data[i].id}' >Send Message</a>
+                                </div>`;
                     }
                     else {
-                        subContent = `<button class='btn btn-outline-primary' onclick="SendFollow('${data[i].id}')">Follow</button>`;
+                        subContent = `
+                         <div class='add-friend-btn'>
+                        <button class='btn btn-outline-primary' onclick="SendFollow('${data[i].id}')">Follow</button>          
+                                </div>
+                        `;
                     }
                 }
+
 
                 var content = "";
 
@@ -72,12 +84,9 @@ function GetAllUsers() {
                                 </li>
                             </ul>
                             <div class='button-group d-flex justify-content-between align-items-center'>
-                                <div class='add-friend-btn'>
+                               
                                    ${subContent}
-                                </div>
-                                <div class='send-message-btn'>
-                                    <button type='submit'>Send Message</button>
-                                </div>
+                             
                             </div>
                         </div>
                 </div>
@@ -118,6 +127,33 @@ function SendFollow(id) {
         }
     })
 }
+
+function GetContacts() {
+    var element = document.querySelector("#contacts-list");
+    $.ajax({
+        url: `/Home/GetAllUsers`,
+        method: "GET",
+        success: function (data) {
+            var content = "";
+            var list = "";
+            for (let i = 0; i < data.length; i++) {
+                content = `
+             <div class="contact-item">
+                        <a href='/Home/GoChat/${data[i].id}'><img src="${data[i].profileImageUrl}" class="rounded-circle" alt="image"></a>
+                        <span class="name"><a href="#">${data[i].userName}</a></span>
+                        <span class=${data[i].isOnline ? 'status-online' : 'status-offline'}></span>
+                    </div>
+            `;
+                list += content;
+            }
+            element.innerHTML = list;
+
+        }
+
+    })
+}
+
+GetContacts();
 
 function DeclineRequest(id, senderId) {
     $.ajax({

@@ -155,7 +155,7 @@ namespace Zust.Entities.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.CustomIdentityRole", b =>
@@ -298,7 +298,7 @@ namespace Zust.Entities.Migrations
 
                     b.HasIndex("YourFriendId");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.FriendRequest", b =>
@@ -325,7 +325,7 @@ namespace Zust.Entities.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("FriendRequests");
+                    b.ToTable("FriendRequests", (string)null);
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Post", b =>
@@ -359,7 +359,7 @@ namespace Zust.Entities.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
