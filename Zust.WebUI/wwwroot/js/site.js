@@ -26,7 +26,7 @@ function GetAllUsers() {
                         subContent = `<button class='btn btn-outline-primary' onclick="SendFollow('${data[i].id}')">Follow</button>`;
                     }
                 }
-               
+
                 var content = "";
 
 
@@ -92,23 +92,140 @@ function GetAllUsers() {
 
 }
 GetAllUsers();
+GetMyRequests();
 
 
 function SendFollow(id) {
-    const element = document.querySelector("#alert");
-    element.style.display = "none";
+    const element = document.querySelector("#notification-list");
+    const icon = document.querySelector("#notification-span");
     $.ajax({
         url: `/Home/SendFollow/${id}`,
         method: "GET",
         success: function (data) {
-            element.style.display = "block";
-            element.innerHTML = "Your friend request sent successfully";
+            var currentCount = parseInt(icon.innerHTML,10);
+            icon.innerHTML = currentCount + 1;
+            var content = ` <div class="figure">
+                    </div>
+                    <div class="text">
+                        <h4><a href="#">${data}</a></h4>
+                       
+                    </div>`;
+                        //<a href="#"><img src="~/assets/images/user/customer-service.png" class="rounded-circle" alt="image"></a>
+      
+
+
+            element.innerHTML=content;
+        }
+    })
+}
+
+function DeclineRequest(id, senderId) {
+    $.ajax({
+        url: `/Home/DeclineRequest?id=${id}&senderId=${senderId}`,
+        method: "GET",
+        success: function () {
+         
+            SendFollowCall(senderId);
+            GetAllUsers();
+            GetMyRequests();
+          
+        }
+    })
+}
+
+function TakeRequest(id) {
+    $.ajax({
+        url: `/Home/TakeRequest?id=${id}`,
+        method: "DELETE",
+        success: function (data) {
+            GetAllUsers();
+             SendFollowCall(id);
+        }
+    })
+}
+
+function UnfollowRequest(id) {
+    $.ajax({
+        url: `/Home/Unfollow?id=${id}`,
+        method: "DELETE",
+        success: function (data) {
+          
             GetAllUsers();
             SendFollowCall(id);
-            setTimeout(() => {
-                element.innerHTML = "";
-                element.style.display = "none";
-            }, 5000)
+          
+        }
+    })
+}
+
+function DeleteRequest(id) {
+    $.ajax({
+        url: `/Home/DeleteRequest/${id}`,
+        method: "DELETE",
+        success: function (data) {
+            GetMyRequests();
+        }
+    })
+}
+
+
+function AcceptRequest(id, id2, requestId) {
+    $.ajax({
+        url: `/Home/AcceptRequest?userId=${id}&senderid=${id2}&requestId=${requestId}`,
+        method: "GET",
+        success: function (data) {
+          
+            SendFollowCall(id);
+            SendFollowCall(id2);
+            console.log("Accepted!")
+            
+        }
+    })
+}
+
+
+function GetMyRequests() {
+    $.ajax({
+        url: '/Home/GetAllRequests',
+        method: 'GET',
+        success: function (data) {
+            let content = "";
+            let subContent = "";
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].status == "Request") {
+                    subContent = `
+                     <div class="friend-requests-body" data-simplebar>
+                <div class="item d-flex align-items-center">
+                    <div class="figure">
+                        <a href="#"><img src="~/assets/images/user/user-2.jpg" class="rounded-circle" alt="image"></a>
+                    </div>
+
+                    <div class="content d-flex justify-content-between align-items-center">
+                        <div class="text">
+                            <h4><a href="#">${data[i].content}</a></h4>
+
+                        </div>
+                        <div class="btn-box d-flex align-items-center">
+                            <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button" onclick="DeclineRequest(${data[i].id},'${data[i].senderId}')"><i class="ri-close-line"></i></button>
+
+                            <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"  onclick="AcceptRequest('${data[i].senderId}','${data[i].receiverId}',${data[i].id})"><i class="ri-check-line"></i></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                    `;
+                }
+                //else {
+                //    subContent = `
+                //    <div class='card-body'>
+                //    <button class='btn btn-warning' onclick="DeleteRequest(${data[i].id})">Delete</button>
+                //    </div>
+                //    `;
+                //}
+
+                content += subContent;
+            }
+            $("#requests").html(content);
         }
     })
 }
@@ -119,12 +236,9 @@ function SendFollow(id) {
 
 
 
-
-
-
 function toggleLike(postId) {
     $.ajax({
-        url: '/Home/ToggleLike',  
+        url: '/Home/ToggleLike',
         type: 'POST',
         data: { postId: postId },
         success: function (response) {
@@ -132,10 +246,10 @@ function toggleLike(postId) {
                 var likeButton = $('.like-button[data-post-id="' + postId + '"]');
                 var likeCountSpan = likeButton.find('.number');
 
-             
+
                 likeCountSpan.text(response.likeCount);
 
-             
+
                 if (response.isLiked) {
                     likeButton.addClass('liked');
                     likeButton.find('span:first').text('Liked');
@@ -156,7 +270,7 @@ function toggleLike(postId) {
 
 
 
- 
+
 
 
 function addNewPost() {
@@ -249,7 +363,7 @@ ${posts[i].isCurrentUser ? `                <div class="dropdown">
 function getRecentComments(postId) {
     var commentsHtml = "";
     $.ajax({
-        url: "/Home/GetRecentComments", 
+        url: "/Home/GetRecentComments",
         type: "GET",
         data: { postId: postId },
         success: function (comments) {

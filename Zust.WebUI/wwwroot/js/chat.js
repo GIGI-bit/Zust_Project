@@ -10,24 +10,25 @@ connection.start().then(function () {
         return console.error(err.toString());
     })
 
-let element = document.querySelector("#alert");
 
 connection.on("Connect", function (info) {
     GetAllUsers();
-    element.style.display = "block";
-    element.innerHTML = info;
-    setTimeout(() => {
-        element.innerHTML = "";
-        element.style.display = "none";
-    }, 5000);
+    console.log("connected");
+ 
 })
 
 connection.on("Disconnect", function (info) {
     GetAllUsers();
-    element.style.display = "block";
-    element.innerHTML = info;
-    setTimeout(() => {
-        element.innerHTML = "";
-        element.style.display = "none";
-    }, 5000);
 })
+connection.on("ReceiveNotification", function () {
+    GetMyRequests();
+    GetAllUsers();
+});
+
+
+async function SendFollowCall(id) {
+    await connection.invoke("SendFollow", id);
+}
+
+
+

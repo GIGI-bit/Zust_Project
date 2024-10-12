@@ -20,6 +20,10 @@ builder.Services.AddScoped<IPostDal, PostDal>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<ICommentDal,CommentDal>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IFriendRequestDal, FriendRequestDal>();
+builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
+builder.Services.AddScoped<IFriendDal, FriendDal>();
+builder.Services.AddScoped<IFriendService, FriendService>();
 
 
 builder.Services.AddCors(options =>
