@@ -18,10 +18,10 @@ namespace Zust.DataAccess.Concretes
             _context = context;
         }
 
-        public async Task<Chat> GetChat(string id)
+        public async Task<Chat> GetChat(string senderId,string recieverId)
         {
-          return await _context.Chats.Include(nameof(Chat.Messages)).FirstOrDefaultAsync(c => c.SenderId == id && c.ReceiverId == id ||
-                       c.SenderId == id && c.ReceiverId == id);
+          return await _context.Chats.Include(nameof(Chat.Messages)).FirstOrDefaultAsync(c => c.SenderId == senderId && c.ReceiverId == recieverId||
+                       c.SenderId == recieverId && c.ReceiverId == senderId);
         }
 
         public  List<Chat> GetChatsWithReciever(string id)

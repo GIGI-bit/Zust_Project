@@ -111,7 +111,7 @@ function SendFollow(id) {
         url: `/Home/SendFollow/${id}`,
         method: "GET",
         success: function (data) {
-            var currentCount = parseInt(icon.innerHTML,10);
+            var currentCount = parseInt(icon.innerHTML, 10);
             icon.innerHTML = currentCount + 1;
             var content = ` <div class="figure">
                     </div>
@@ -119,11 +119,11 @@ function SendFollow(id) {
                         <h4><a href="#">${data}</a></h4>
                        
                     </div>`;
-                        //<a href="#"><img src="~/assets/images/user/customer-service.png" class="rounded-circle" alt="image"></a>
-      
+            //<a href="#"><img src="~/assets/images/user/customer-service.png" class="rounded-circle" alt="image"></a>
 
 
-            element.innerHTML=content;
+
+            element.innerHTML = content;
         }
     })
 }
@@ -155,16 +155,82 @@ function GetContacts() {
 
 GetContacts();
 
+function SendMessage(receiverId, senderId) {
+    let content = document.querySelector("#message-input");
+    let obj = {
+        receiverId: receiverId,
+        senderId: senderId,
+        content: content.value
+    };
+    console.log(obj);
+    $.ajax({
+        url: `/Home/AddMessage`,
+        method: "POST",
+        data: obj,
+        success: function (data) {
+            GetMessageCall(receiverId, senderId);
+            content.value = "";
+        }
+    })
+
+}
+
+
+
+function GetMessages(receiverId, senderId) {
+    var container = document.querySelector("#chat-container");
+    $.ajax({
+
+        url: `/Home/GetAllMessages?receiverId=${receiverId}&senderId=${senderId}`,
+        method: "GET",
+        success: function (data) {
+            var chat = ``;
+            var list = ``;
+            for (var i = 0; i < data.messages.length; i++) {
+                if (receiverId == data.currentUserId) {
+                    chat = `
+                <div class="chat">
+                    <div class="chat chat-left">
+                        <div class="chat-avatar">
+                            <a routerLink="/profile" class="d-inline-block">
+                                <img src="~/assets/images/user/user-8.jpg" width="50" height="50" class="rounded-circle" alt="image">
+                            </a>
+                        </div>
+
+                        <div class="chat-body">
+                            <div class="chat-message">
+                                <p>${messages[i].content}</p>
+                                <span class="time d-block">${messages[i].dateTime}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+
+
+                }
+
+                list += chat;
+
+            }
+            container.innerHTML = list;
+
+        }
+
+    })
+}
+
+
 function DeclineRequest(id, senderId) {
     $.ajax({
         url: `/Home/DeclineRequest?id=${id}&senderId=${senderId}`,
         method: "GET",
         success: function () {
-         
+
             SendFollowCall(senderId);
             GetAllUsers();
             GetMyRequests();
-          
+
         }
     })
 }
@@ -175,7 +241,7 @@ function TakeRequest(id) {
         method: "DELETE",
         success: function (data) {
             GetAllUsers();
-             SendFollowCall(id);
+            SendFollowCall(id);
         }
     })
 }
@@ -185,10 +251,10 @@ function UnfollowRequest(id) {
         url: `/Home/Unfollow?id=${id}`,
         method: "DELETE",
         success: function (data) {
-          
+
             GetAllUsers();
             SendFollowCall(id);
-          
+
         }
     })
 }
@@ -209,11 +275,11 @@ function AcceptRequest(id, id2, requestId) {
         url: `/Home/AcceptRequest?userId=${id}&senderid=${id2}&requestId=${requestId}`,
         method: "GET",
         success: function (data) {
-          
+
             SendFollowCall(id);
             SendFollowCall(id2);
             console.log("Accepted!")
-            
+
         }
     })
 }

@@ -44,9 +44,9 @@ namespace Zust.Business.Concretes
             await _chatDal.UpdateAsync(entity);
         }
 
-        public async Task<Chat> GetChat(string id)
+        public async Task<Chat> GetChat(string senderId, string recieverId)
         {
-            return await _chatDal.GetChat(id);
+            return await _chatDal.GetChat(senderId,recieverId);
 
         }
 

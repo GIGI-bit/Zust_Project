@@ -10,7 +10,7 @@ namespace Zust.DataAccess.Abstracts
 {
     public interface IChatDal:IEntityRepository<Chat>
     {
-        Task<Chat> GetChat(string id);
+        Task<Chat> GetChat(string senderId, string recieverId);
         public List<Chat> GetChatsWithReciever(string id);
     }
 }

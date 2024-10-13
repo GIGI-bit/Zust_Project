@@ -170,11 +170,16 @@ namespace Zust.WebUI.Controllers
 
             }
 
-
-
-
             return Json(sortedPosts);
         }
+
+        public async Task<IActionResult> GetAllMessages(string receiverId, string senderId)
+        {
+            var chat = await _chatService.GetChat(senderId, receiverId);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return Ok(new { Messages = chat.Messages != null ? chat.Messages : new List<Message>(), CurrentUserId = user.Id });
+        }
+
         [HttpPost]
         public async Task<IActionResult> ToggleLike(int postId)
         {
@@ -262,8 +267,10 @@ namespace Zust.WebUI.Controllers
 
         public async Task<IActionResult> GoChat(string id)
         {
+
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var chat = await _chatService.GetChat(user.Id);
+            var chat = await _chatService.GetChat(user.Id,id);
+            ViewBag.User = user;
 
             if (chat == null)
             {

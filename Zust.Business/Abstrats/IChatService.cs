@@ -16,7 +16,7 @@ namespace Zust.Business.Abstrats
         Task DeleteAsync(Chat entity);
         Task AddAsync(Chat entity);
         Task UpdateAsync(Chat entity);
-        public Task<Chat> GetChat(string id);
+        public Task<Chat> GetChat(string senderId, string recieverId);
         public List<Chat> GetChatsWithReciever(string id);
 
 
