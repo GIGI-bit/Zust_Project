@@ -82,7 +82,7 @@ namespace Zust.WebUI.Controllers
                     };
                     IdentityResult roleResult = await _roleManager.CreateAsync(role);
                     if (!roleResult.Succeeded) { ModelState.AddModelError("", "We couldn't assign you a role!"); }
-
+                    ///
                 }
                 await _userManager.AddToRoleAsync(user, "User");
                 return RedirectToAction("Login", "Account");
