@@ -4,11 +4,12 @@ function GetAllUsers() {
         url: "/Home/GetAllUsers",
         method: "GET",
         success: function (data) {
-
+            var content = "";
 
             let subContent = '';
             console.log("heloooo")
             for (let i = 0; i < data.length; i++) {
+                console.log(data.length);
                 let style = '';
 
                 var usersListDiv = document.getElementById("users-list");
@@ -39,7 +40,7 @@ function GetAllUsers() {
                 }
 
 
-                var content = "";
+              
 
 
                 let item = `
@@ -150,8 +151,8 @@ function GetContacts() {
             `;
                 list += content;
             }
-            element.innerHTML = list;
-
+            //element.innerHTML = list;
+            $("#contacts-list").html(list);
         }
 
     })
@@ -415,7 +416,7 @@ function addNewPost() {
             postArea.innerHTML = "";
             postArea.innerHTML += component;
 
-
+            console.log("firs ajax");
 
 
             $.ajax({
@@ -563,7 +564,7 @@ function submitComment(postId) {
 
 function submitPost() {
     var formData = new FormData(document.getElementById('postForm'));
-
+    console.log(formData);
     $.ajax({
         url: '/Home/CreatePost',
         type: 'POST',

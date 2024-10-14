@@ -79,6 +79,7 @@ namespace Zust.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost(PostViewModel model)
         {
+            Console.WriteLine("inside create post");
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -98,11 +99,13 @@ namespace Zust.WebUI.Controllers
                     //post.VideoLink=await 
 
                 }
+                Console.WriteLine("adding post");
                 await _postService.AddAsync(post);
+                Console.WriteLine("Post added");
 
-
-            }
             return Json(new { success = true, message = "Post created successfully!" });
+            }
+            return Json(new { success = false, message = "Post not created successfully!" });
         }
 
         public IActionResult Privacy()
@@ -160,19 +163,23 @@ namespace Zust.WebUI.Controllers
         {
             var sortedPosts = await _postService.GetFullPostsList();
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            foreach (var post in sortedPosts)
+            if (sortedPosts != null)
             {
-                post.IsCurrentUser = user.Id == post.User.UserId ? true : false;
-                post.IsLiked = post.LikedUsers.Contains(new DataAccess.DTOs.UserDTO { UserId = user.Id, UserName = user.UserName, UserProfileImage = user.ProfileImageUrl });
-                foreach (var comment in post.Comments)
+                foreach (var post in sortedPosts)
                 {
-                    comment.IsCurrentUser = user.Id == comment.User.UserId ? true : false;
+                    post.IsCurrentUser = user.Id == post.User.UserId ? true : false;
+                    post.IsLiked = post.LikedUsers.Contains(new DataAccess.DTOs.UserDTO { UserId = user.Id, UserName = user.UserName, UserProfileImage = user.ProfileImageUrl });
+                    foreach (var comment in post.Comments)
+                    {
+                        comment.IsCurrentUser = user.Id == comment.User.UserId ? true : false;
+
+                    }
 
                 }
 
+                return Json(sortedPosts);
             }
-
-            return Json(sortedPosts);
+            else return Json(new List<Post>());
         }
 
         public async Task<IActionResult> GetAllMessages(string receiverId, string senderId)
@@ -229,7 +236,7 @@ namespace Zust.WebUI.Controllers
                     IsImage = false,
                     SenderId = current.Id
                 };
-              _messageService.AddAsync(message);
+             await _messageService.AddAsync(message);
                 return Ok();
             }
             return NotFound();
@@ -295,6 +302,8 @@ namespace Zust.WebUI.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var chat = await _chatService.GetChat(user.Id,id);
             ViewBag.User = user;
+            var forUserName = await userService.GetAsync(u=>u.Id==id);
+            ViewBag.RecieverUsername=forUserName.UserName;
 
             if (chat == null)
             {

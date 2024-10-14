@@ -29,19 +29,19 @@ namespace Zust.DataAccess.Concretes
                 Message = p.Text,
                 PostImage = p.ImageLink,
                 CreatedAt = p.CreateDate,
-            User= new UserDTO
-             {
-                 UserName = p.Publisher.UserName,
-                 UserProfileImage = p.Publisher.ProfileImageUrl,
-                 UserId=p.PublisherId
-             },
-            LikedUsers=p.Likes.Select(l=>new UserDTO
-            {
-                UserId = l.Id,
-                UserName=l.UserName,
-                UserProfileImage=l.ProfileImageUrl
-            }).ToList(),
-            LikeCount=p.Likes.Count(),
+                User = new UserDTO
+                {
+                    UserName = p.Publisher.UserName,
+                    UserProfileImage = p.Publisher.ProfileImageUrl,
+                    UserId = p.PublisherId
+                },
+                LikedUsers = p.Likes.Select(l => new UserDTO
+                {
+                    UserId = l.Id,
+                    UserName = l.UserName,
+                    UserProfileImage = l.ProfileImageUrl
+                }).ToList(),
+                LikeCount = p.Likes.Count(),
                 Comments = p.Comments.Select(c => new CommentDTO
                 {
                     CommentText = c.Content,
@@ -59,7 +59,7 @@ namespace Zust.DataAccess.Concretes
             return posts;
         }
 
-        public async Task<PostDTO> RemoveLike(CustomIdentityUser user,int postId)
+        public async Task<PostDTO> RemoveLike(CustomIdentityUser user, int postId)
         {
             var post = await _context.Posts
                              .Include(p => p.Likes)
@@ -79,12 +79,12 @@ namespace Zust.DataAccess.Concretes
             {
                 PostId = post.Id,
                 LikeCount = post.Likes.Count,
-                IsLiked = post.Likes.Any(u => u.Id == user.Id), 
+                IsLiked = post.Likes.Any(u => u.Id == user.Id),
                 LikedUsers = post.Likes.Select(u => new UserDTO
                 {
                     UserId = u.Id,
                     UserName = u.UserName,
-                   
+
                 }).ToList()
             };
             return postDto;
