@@ -8,8 +8,16 @@ using Zust.DataAccess.Concretes;
 //using Zust.WebUI.Data;
 //using Zust.WebUI.Entities;
 using Zust.Entities.Models;
+using Zust.WebUI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -69,5 +77,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<ChatHub>("/chathub");
+
 
 app.Run();

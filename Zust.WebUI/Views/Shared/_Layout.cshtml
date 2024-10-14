@@ -74,7 +74,7 @@
 
                         <div class="others-options d-flex align-items-center">
                             <div class="option-item">
-                                <a asp-controller="Home" asp-action="Index" class="home-btn"><i class="flaticon-home"></i></a>
+                                <a asp-controller="Home" asp-action="Index" onclick="addNewPost()" class="home-btn"><i class="flaticon-home"></i></a>
                             </div>
                             @await Component.InvokeAsync("FriendRequests")
                             <div class="option-item">
@@ -155,11 +155,11 @@
                                             <a href="mailto:matthew507@gmail.com">@ViewBag.User.Email</a>
                                         </div>
                                         <ul class="profile-body">
-                                            <li><i class="flaticon-user"></i> <a href="my-profile.html">My Profile</a></li>
+                                            <li><i class="flaticon-user"></i> <a asp-controller="Home" asp-action="Profile">My Profile</a></li>
                                             <li><i class="flaticon-settings"></i> <a href="setting.html">Setting</a></li>
                                             <li><i class="flaticon-privacy"></i> <a href="privacy.html">Privacy</a></li>
                                             <li><i class="flaticon-information"></i> <a href="help-and-support.html">Help & Support</a></li>
-                                            <li><i class="flaticon-logout"></i> <a href="index.html">Logout</a></li>
+                                            <li><i class="flaticon-logout"></i> <a asp-controller="Account" asp-action="Login">Logout</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@
                                 <div class="option-item">
                                     <a asp-controller="Home" asp-action="Index" class="home-btn"><i class="flaticon-home"></i></a>
                                 </div>
-                                <div class="option-item">
+                                 <div class="option-item">
                                     <div class="dropdown friend-requests-nav-item">
                                         <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="friend-requests-btn">
@@ -391,7 +391,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
                                 <div class="option-item">
                                     <div class="dropdown language-option">
                                         <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -476,30 +476,30 @@
                             <span class="menu-title">Notifications</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                 @*    <li class="nav-item">
                         <a asp-controller="Home" asp-action="Messages" class="nav-link">
                             <span class="icon"><i class="flaticon-comment-1"></i></span>
                             <span class="menu-title">Messages</span>
                         </a>
-                    </li>
+                    </li> *@
                     <li class="nav-item">
                         <a asp-controller="Home" asp-action="Friends" class="nav-link">
                             <span class="icon"><i class="flaticon-friends"></i></span>
                             <span class="menu-title">Friends</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+              @*       <li class="nav-item">
                         <a asp-controller="Home" asp-action="Events" class="nav-link">
                             <span class="icon"><i class="flaticon-calendar"></i></span>
                             <span class="menu-title">Events</span>
                         </a>
-                    </li>
+                    </li> *@
                    
                 </ul>
             </div>
         </div>
         <!-- End Sidemenu Area -->
-        @RenderBody();
+        @RenderBody()
 
         <!-- Start Right Sidebar Area -->
         <div class="right-sidebar-area" data-simplebar>
@@ -514,7 +514,7 @@
                     </form>
                 </div>
                 <div class="contact-body" id="contacts-list" data-simplebar>
-                    <div class="contact-item">
+                    @*       <div class="contact-item">
                         <a href="#"><img src="~/assets/images/user/user-18.jpg" class="rounded-circle" alt="image"></a>
                         <span class="name"><a href="#">Karen Williams</a></span>
                         <span class="status-online"></span>
@@ -583,8 +583,8 @@
                         <a href="#"><img src="~/assets/images/user/user-7.jpg" class="rounded-circle" alt="image"></a>
                         <span class="name"><a href="#">Frank S. Arena</a></span>
                         <span class="status-offline"></span>
-                    </div>
-                </div>
+                    </div>*@
+                </div> 
             </div>
         </div>
         <!-- End Right Sidebar Area -->

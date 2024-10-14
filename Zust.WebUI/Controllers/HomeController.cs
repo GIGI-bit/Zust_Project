@@ -126,8 +126,10 @@ namespace Zust.WebUI.Controllers
             return View();
         }
 
-        public IActionResult Profile()
+        public async  Task<IActionResult> Profile()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            ViewBag.User = user;
             return View();
         }
 
@@ -209,6 +211,28 @@ namespace Zust.WebUI.Controllers
             var recentComments = await _commentService.GetCommentsForPostAsync(postId, user.Id);
 
             return Json(recentComments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMessage(MessageModel model)
+        {
+            var current = await _userManager.GetUserAsync(HttpContext.User);
+            var chat = await _chatService.GetChat(model.SenderId,model.ReceiverId);
+            if (chat != null)
+            {
+                var message = new Message
+                {
+                    ChatId = chat.Id,
+                    Content = model.Content,
+                    DateTime = DateTime.Now,
+                    HasSeen = false,
+                    IsImage = false,
+                    SenderId = current.Id
+                };
+              _messageService.AddAsync(message);
+                return Ok();
+            }
+            return NotFound();
         }
 
         [HttpPost]

@@ -135,13 +135,17 @@ function GetContacts() {
         method: "GET",
         success: function (data) {
             var content = "";
+            var span = "";
             var list = "";
             for (let i = 0; i < data.length; i++) {
+                
+                if (data[i].isOnline) span = `<span class="status-online"></span>`;
+                else span = ` <span class="status-offline"></span>`;
                 content = `
              <div class="contact-item">
                         <a href='/Home/GoChat/${data[i].id}'><img src="${data[i].profileImageUrl}" class="rounded-circle" alt="image"></a>
                         <span class="name"><a href="#">${data[i].userName}</a></span>
-                        <span class=${data[i].isOnline ? 'status-online' : 'status-offline'}></span>
+                        ${span}
                     </div>
             `;
                 list += content;
@@ -187,10 +191,12 @@ function GetMessages(receiverId, senderId) {
             var chat = ``;
             var list = ``;
             for (var i = 0; i < data.messages.length; i++) {
-                if (receiverId == data.currentUserId) {
+
+                var chatClass = data.messages[i].senderId === data.currentUserId ? "chat-right" : "chat_left";
+
                     chat = `
                 <div class="chat">
-                    <div class="chat chat-left">
+                    <div class="chat ${chatClass}">
                         <div class="chat-avatar">
                             <a routerLink="/profile" class="d-inline-block">
                                 <img src="~/assets/images/user/user-8.jpg" width="50" height="50" class="rounded-circle" alt="image">
@@ -199,8 +205,8 @@ function GetMessages(receiverId, senderId) {
 
                         <div class="chat-body">
                             <div class="chat-message">
-                                <p>${messages[i].content}</p>
-                                <span class="time d-block">${messages[i].dateTime}</span>
+                                <p>${data.messages[i].content}</p>
+                                <span class="time d-block">${data.messages[i].dateTime}</span>
                             </div>
                         </div>
                     </div>
@@ -208,7 +214,30 @@ function GetMessages(receiverId, senderId) {
 
 
 
-                }
+                
+                //else  {
+                //    chat = `
+                //<div class="chat">
+                //    <div class="chat chat_left">
+                //        <div class="chat-avatar">
+                //            <a routerLink="/profile" class="d-inline-block">
+                //                <img src="~/assets/images/user/user-8.jpg" width="50" height="50" class="rounded-circle" alt="image">
+                //            </a>
+                //        </div>
+
+                //        <div class="chat-body">
+                //            <div class="chat-message">
+                //                <p>${data.messages[i].content}</p>
+                //                <span class="time d-block">${data.messages[i].dateTime}</span>
+                //            </div>
+                //        </div>
+                //    </div>
+                //</div>`; }
+                   
+
+
+
+                
 
                 list += chat;
 
@@ -460,7 +489,7 @@ ${posts[i].isCurrentUser ? `                <div class="dropdown">
     });
 }
 
-//addNewPost()
+addNewPost()
 
 function getRecentComments(postId) {
     var commentsHtml = "";
