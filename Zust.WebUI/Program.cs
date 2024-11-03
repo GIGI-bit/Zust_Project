@@ -48,7 +48,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var con = builder.Configuration.GetConnectionString("Default");
+var con = builder.Configuration.GetConnectionString("Production");
 builder.Services.AddDbContext<SocialNetworkDbContext>(opt =>
 {
     opt.UseSqlServer(con);
